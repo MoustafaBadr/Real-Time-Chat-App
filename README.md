@@ -1,5 +1,13 @@
 # Real-Time-Chat-App
 Spring Boot WebSocket Chat Demo 
+In this article, you’ll learn how to use WebSocket API with Spring Boot and build a simple group chat application at the end.
+
+WebSocket is a communication protocol that makes it possible to establish a two-way communication channel between a server and a client.
+
+WebSocket works by first establishing a regular HTTP connection with the server and then upgrading it to a bidirectional websocket connection by sending an Upgrade header.
+
+WebSocket is supported in most modern web browsers and for browsers that don’t support it, we have libraries that provide fallbacks to other techniques like comet and long-polling.
+
 WebSocket Configuration
 The first step is to configure the websocket endpoint and message broker. Create a new package config inside com.example.websocketdemo package, then create a new class WebSocketConfig inside config package with the following contents -
 
@@ -181,3 +189,28 @@ We’re already broadcasting user join event in the addUser() method defined ins
 
 In the SessionDisconnect event, we’ve written code to extract the user’s name from the websocket session and broadcast a user leave event to all the connected clients.
 ---------------------------------------------------
+Using RabbitMQ as the message broker
+If you want to use a full featured message broker like RabbitMQ instead of the simple in-memory message broker then just add the following dependencies in your pom.xml file -
+
+<!-- RabbitMQ Starter Dependency -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-amqp</artifactId>
+</dependency>
+
+<!-- Following additional dependency is required for Full Featured STOMP Broker Relay -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-reactor-netty</artifactId>
+</dependency>
+Once you’ve added the above dependencies, you can enable RabbitMQ message broker in the WebSocketConfig.java file like this -
+
+public void configureMessageBroker(MessageBrokerRegistry registry) {
+    registry.setApplicationDestinationPrefixes("/app");
+
+    // Use this for enabling a Full featured broker like RabbitMQ
+    registry.enableStompBrokerRelay("/topic")
+            .setRelayHost("localhost")
+            .setRelayPort(61613)
+            .setClientLogin("guest")
+            .setClientPasscode("guest");
