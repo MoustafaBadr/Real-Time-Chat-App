@@ -192,6 +192,7 @@ In the SessionDisconnect event, we’ve written code to extract the user’s nam
 Using RabbitMQ as the message broker
 If you want to use a full featured message broker like RabbitMQ instead of the simple in-memory message broker then just add the following dependencies in your pom.xml file -
 
+
 <!-- RabbitMQ Starter Dependency -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -203,6 +204,8 @@ If you want to use a full featured message broker like RabbitMQ instead of the s
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-reactor-netty</artifactId>
 </dependency>
+
+
 Once you’ve added the above dependencies, you can enable RabbitMQ message broker in the WebSocketConfig.java file like this -
 
 public void configureMessageBroker(MessageBrokerRegistry registry) {
